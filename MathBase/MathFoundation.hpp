@@ -1,7 +1,7 @@
 // MathFoundation.hpp
 // MathBase
 // 信息安全的数学基础课程依赖库
-// 实现一系列信息安全的数学基础运算
+// 实现信息安全的数学基础运算
 //
 //  Created by 杨磊 on 2019/4.
 //  Copyright © 2019 杨磊. All rights reserved.
@@ -257,5 +257,233 @@ bool DiophantineEquation(int factor1,int factor2,int rightValue,bool printResult
     }
     return true;
 }
+
+//模m同余类
+class DiffMod{};
+class Congruence{
+private:
+    int value;
+    int m;
+public:
+    Congruence(int theM,int theValue = 0){
+        m = theM;
+        value = theValue % theM;
+    }
+    Congruence(const Congruence &obj){
+        m = obj.m;
+        value = obj.value;
+    }
+    //加法和乘法的重载
+    Congruence operator+(const Congruence &obj){
+        if(m != obj.m)throw DiffMod();
+        Congruence answer(m,value+obj.value);
+        return answer;
+    }
+    
+    Congruence operator*(const Congruence &obj){
+        if(m != obj.m)throw DiffMod();
+        Congruence answer(m,value*obj.value);
+        return answer;
+    }
+    //类型转换
+    operator int(){
+        return value;
+    }
+    
+};
+
+//计算欧拉函数的值
+int EularFunction(int number){
+    int answer = 0;
+    int i = 1;
+    while(i < number){
+        if(isCoprime(number, i))
+            answer++;
+        i++;
+    }
+    
+    return answer;
+}
+
+//编程计算中国剩余定理
+//参数为两个数组和一个数，分别是同余式组的值和模以及同余式组的个数
+int ChineseRamainder(int* b,int* m,int size,bool printResult = false){
+    int* M;
+    int* oppoM;
+    int mq = 1;
+    int noUse,answer = 0;
+    M = new int[size];
+    oppoM = new int [size];
+    
+    for(int i = 0; i < size;i++){
+        mq *= m[i];
+    }
+    
+    for(int i = 0;i < size;i++){
+        M[i] = mq / m[i];
+    }
+    
+    for(int i = 0;i < size;i++){
+        BezoutEquation(M[i], m[i], oppoM[i], noUse,false);
+        while(oppoM[i] < 0)oppoM[i] += m[i];
+    }
+    
+    for(int i = 0;i < size;i++){
+        answer += b[i]*oppoM[i]*M[i];
+    }
+    
+    answer = answer % mq;
+    
+    if(printResult){
+        std::cout << "the answer is:\n";
+        std::cout << "x = " << answer << " + q * " << mq << std::endl;;
+    }
+    
+    return answer;
+}
+
+//多项式
+class Polynomial{
+private:
+    struct Node{
+        int factor;
+        int exponent;
+        
+        Node(int fac,int exp){
+            factor = fac;
+            exponent = exp;
+        }
+    };
+    std::list<Node> content;
+    
+    friend void EuclidDivide(const Polynomial dividend,const int mod,Polynomial &remainder);
+public:
+    Polynomial(){
+        
+    }
+    
+    Polynomial(const Polynomial &obj){
+        content = obj.content;
+    }
+    
+    Polynomial(const Node &n){
+        content.push_back(n);
+    }
+    
+    void assignValue(){
+        int fac,exp;
+        std::cout << "please enter fac and exp:";
+        while(std::cin >> fac >> exp){
+            content.push_back(Node(fac,exp));
+            std::cout << "please enter fac and exp:";
+        }
+        std::cin.clear();
+        
+    }
+    void printPoly(){
+        std::list<Node>::iterator itr;
+        itr = content.begin();
+        
+        while(itr != content.end()){
+            if(itr != content.begin())
+                std::cout << " + ";
+            std::cout << itr->factor << "*x^" << itr->exponent << " ";
+            itr++;
+        }
+    }
+    
+    Polynomial operator+(Polynomial obj){
+        Polynomial answer;
+        Polynomial left = *this;
+        while(!obj.content.empty() || !left.content.empty()){
+            if(left.content.empty()){
+                answer.content.push_back(obj.content.front());
+                obj.content.pop_front();
+            }else if(obj.content.empty()){
+                answer.content.push_back(left.content.front());
+                left.content.pop_front();
+            }else if(left.content.front().exponent == obj.content.front().exponent){
+                answer.content.push_back(Node(left.content.front().factor + obj.content.front().factor,left.content.front().exponent));
+                left.content.pop_front();
+                obj.content.pop_front();
+            }else if(left.content.front().exponent > obj.content.front().exponent){
+                answer.content.push_back(left.content.front());
+                left.content.pop_front();
+            }else{
+                answer.content.push_back(obj.content.front());
+                obj.content.pop_front();
+            }
+        }
+        
+        return answer;
+    }
+    
+    bool operator<(const Polynomial &obj)const{
+        if(content.front().exponent < obj.content.front().exponent)
+            return true;
+        else if(content.front().exponent == obj.content.front().exponent && content.front().factor < obj.content.front().factor)
+            return true;
+        else
+            return false;
+    }
+    
+    bool operator>(const Polynomial &obj)const{
+        if(content.front().exponent > obj.content.front().exponent)
+            return true;
+        else if(content.front().exponent == obj.content.front().exponent && content.front().factor > obj.content.front().factor)
+            return true;
+        else
+            return false;
+    }
+    
+    bool operator==(const Polynomial &obj)const{
+        return !(*this>obj)&&!(*this<obj);
+    }
+    
+    bool operator!=(const Polynomial &obj)const{
+        return !(*this == obj);
+    }
+    
+    Polynomial operator-(Polynomial obj){
+        Polynomial answer;
+        Polynomial left = *this;
+        
+        while(!obj.content.empty() || !left.content.empty()){
+            if(left.content.empty()){
+                answer.content.push_back(Node(-obj.content.front().factor,obj.content.front().exponent));
+                obj.content.pop_front();
+            }else if(obj.content.empty()){
+                answer.content.push_back(left.content.front());
+                left.content.pop_front();
+            }else if(left.content.front().exponent == obj.content.front().exponent){
+                answer.content.push_back(Node(left.content.front().factor - obj.content.front().factor,left.content.front().exponent));
+                left.content.pop_front();
+                obj.content.pop_front();
+            }else if(left.content.front().exponent > obj.content.front().exponent){
+                answer.content.push_back(left.content.front());
+                left.content.pop_front();
+            }else{
+                answer.content.push_back(Node(-obj.content.front().factor,obj.content.front().exponent));
+                obj.content.pop_front();
+            }
+        }
+        
+        return answer;
+    }
+    Polynomial operator*(Polynomial &obj){
+        Polynomial answer;
+        
+        
+        return answer;
+    }
+    void clear(){
+        while(!content.empty()){
+            content.pop_back();
+        }
+    }
+    bool empty()const{
+        return content.empty();
+    }
+};
 
 #endif /*MathFoundation_hpp*/

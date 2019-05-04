@@ -3,7 +3,7 @@
 //编程实现RSA加密算法
 //  MathBase
 //
-//  Created by 杨磊 on 2019/4/13.
+//  Created by 杨磊 on 2019/4.
 //  Copyright © 2019 杨磊. All rights reserved.
 //
 
