@@ -156,7 +156,7 @@ int opeMod(int base,int exp,int mod){
         exp /= 2;
         val = (val * val) % mod ;
     }
-    
+    //设置结果为正
     while(answer <= 0)answer += mod;
     return int(answer % mod);
 }
@@ -170,44 +170,19 @@ void opeM(){
     std::cout << "answer is :" << opeMod(base, exp, mod) << std::endl;
 }
 
-//计算模m逆元的交互式工具
+//使用贝祖等式计算模m逆元的交互式工具
 void opeE(){
     int origin,answer,modx,noUse;
     std::cout << "enter origin:";std::cin >> origin;
     std::cout << "enter mod:";std::cin >> modx;
     BezoutEquation(origin, modx, answer, noUse);
-    while(answer <= 0){
-        answer += modx;
-    }
+    //设置结果为正
+    while(answer <= 0)answer += modx;
     std::cout << "the answer:" << answer << std::endl;
 }
 
-//分解素因数
-int countFactor(int number,int factor);
-void findFactor(const int number){
-    int factor = 1;
-    std::list<int> factors;
-    std::list<int> exps;
-    
-    while(factor <= number){
-        factor ++;
-        if(!isPrime(factor))continue;
-        if(number % factor != 0)continue;
-        factors.push_back(factor);
-        exps.push_back(countFactor(number, factor));
-    }
-    std::cout << std::endl << number << " = ";
-    while(!factors.empty()){
-        std::cout << factors.front() << " ^ " << exps.front() << " ";
-        if(factors.size() != 1){
-            std::cout << " * ";
-        }
-        factors.pop_front();
-        exps.pop_front();
-    }
-}
-
 //计算因数次数的辅助函数
+//判断因数的次数
 int countFactor(int number, int factor){
     int exp = 0;
     
@@ -218,34 +193,68 @@ int countFactor(int number, int factor){
     return exp;
 }
 
+//分解素因数
+void findFactor(const int number,bool printResult = false){
+    int factor = 1;
+    std::list<int> factors;
+    std::list<int> exps;
+    
+    while(factor <= number){
+        factor ++;
+        //除去非素因数的情况
+        if(!isPrime(factor))continue;
+        if(number % factor != 0)continue;
+        factors.push_back(factor);
+        exps.push_back(countFactor(number, factor));
+    }
+    //打印结果
+    if(printResult){
+        std::cout << std::endl << number << " = ";
+        while(!factors.empty()){
+            std::cout << factors.front() << " ^ " << exps.front() << " ";
+            if(factors.size() != 1){
+                std::cout << " * ";
+            }
+            factors.pop_front();
+            exps.pop_front();
+        }
+    }
+}
+
+
 //分解质因数的交互式工具
 void opeFF(void){
     int number = 0;
     std::cout << "please enter the number:";
     std::cin >> number;
     std::cout << "the answer is:";
-    findFactor(number);
+    findFactor(number,true);
     
 }
 
 //使用贝祖等式计算不定方程
 //方程形式：factor1 * x + factor2 = rightValue
-bool DiophantineEquation(int factor1,int factor2,int rightValue){
+bool DiophantineEquation(int factor1,int factor2,int rightValue,bool printResult = true){
     int x,y;
     int CF = MaxCommonFactor(factor1, factor2);
     int ratio = rightValue / CF;
     
     if(rightValue % CF != 0){
-        std::cout << "the equation " << factor1 << " * x + " << factor2 << " * y = " << rightValue
-        << " have no solution" << std::endl;
+        if(printResult){
+            std::cout << "the equation " << factor1 << " * x + " << factor2 << " * y = " << rightValue
+            << " have no solution" << std::endl;
+        }
         return false;
     }
     BezoutEquation(factor1, factor2, x, y);
     x *= ratio;
     y *= ratio;
-    std::cout << "Special solution: x = " << x << " , y = " << y << std::endl;
-    std::cout << "Common solution: x = " << x << " - " << factor2/CF << " * t , y = "
-    << y << " + " << factor1/CF << " * t . (t = 1,2,3...)" << std::endl;
+    if(printResult){
+        std::cout << "Special solution: x = " << x << " , y = " << y << std::endl;
+        std::cout << "Common solution: x = " << x << " - " << factor2/CF << " * t , y = "
+        << y << " + " << factor1/CF << " * t . (t = 1,2,3...)" << std::endl;
+        
+    }
     return true;
 }
 
