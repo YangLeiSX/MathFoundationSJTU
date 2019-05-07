@@ -374,8 +374,9 @@ private:
         }
     }
     //多项式欧几里得除法
-    friend void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder);
-    
+    friend void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder,bool symplify);
+    friend void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &remainder,bool symplify);
+
 public:
     //构造函数
     Polynomial(){}
@@ -426,7 +427,7 @@ public:
         }
     }
     
-    //重载算数运算符
+    //重载算术运算符
     Polynomial operator+(Polynomial obj){
         Polynomial answer;
         Polynomial left = *this;
@@ -492,8 +493,9 @@ public:
                 itr2++;
             }
             itr1++;
+            itr2 = obj.content.begin();
         }
-        
+        answer.removeZero();
         return answer;
     }
     
@@ -510,7 +512,6 @@ public:
             tmp = new Polynomial(itr1->factor / itr2->factor , itr1->exponent - itr2->exponent);
             answer = answer + *tmp;
             dividend = dividend - *tmp * obj;
-            //dividend.removeZero();
         }
         
         return answer;
@@ -567,7 +568,8 @@ public:
 };
 
 //使用简化方法计算多项式的欧几里得除法
-void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder){
+//symplufy为true时 显示系数取同余后的等价余式
+void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder,bool symplify = false){
     Polynomial *tmp;
     remainder.clear();
     
@@ -577,17 +579,18 @@ void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder){
         dividend.content.pop_front();
     }
     
-    std::list<Polynomial::Node>::iterator itr;
-    int i;
-    for(i= 0,itr = remainder.content.begin();i < remainder.content.size();i++,itr ++){
-        itr->factor = itr->factor % mod;
+    if(symplify){
+        std::list<Polynomial::Node>::iterator itr;
+        int i;
+        for(i= 0,itr = remainder.content.begin();i < remainder.content.size();i++,itr ++){
+            itr->factor = itr->factor % mod;
+        }
     }
 }
 
-//使用多项式类的运算计算多项式的欧几里得除法
-//函数功能有问题，需改正
-/*
-void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &remainder){
+//使用多项式类的算术运算计算多项式的欧几里得除法
+//symplufy为true时 显示系数取同余后的等价余式
+void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &remainder,bool symplify = false){
     quotient.clear();
     remainder.clear();
     int facs[] = {1,-1};
@@ -596,6 +599,13 @@ void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &
     quotient = dividend / divisor;
     remainder = dividend - divisor * quotient;
     
+    if(symplify){
+        std::list<Polynomial::Node>::iterator itr;
+        int i;
+        for(i= 0,itr = remainder.content.begin();i < remainder.content.size();i++,itr ++){
+            itr->factor = itr->factor % mod;
+        }
+    }
 }
-*/
+
 #endif /*MathFoundation_hpp*/
