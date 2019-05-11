@@ -146,8 +146,8 @@ void isPrimeNum(){
 //base^exp (mod mod)
 int opeMod(int base,int exp,int mod){
     //设置初值
-    long answer = 1;
-    long val = base % mod;
+    unsigned long answer = 1;
+    unsigned long val = base % mod;
     
     while(exp != 0){
         if(exp % 2 == 1){
@@ -373,6 +373,15 @@ private:
             itr++;
         }
     }
+    
+    int calculate(const int &mod,const int &x){
+        std::list<Polynomial::Node>::iterator itr = content.begin();
+        int answer = 0;
+        for(int i = 0 ; i < content.size();i++,itr++){
+            answer += int(itr->factor * pow(x,itr->exponent)) % mod;
+        }
+        return answer % mod;
+    }
     //多项式欧几里得除法
     friend void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder,bool symplify);
     friend void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &remainder,bool symplify);
@@ -428,144 +437,180 @@ public:
     }
     
     //重载算术运算符
-    Polynomial operator+(Polynomial obj){
-        Polynomial answer;
-        Polynomial left = *this;
-        while(!obj.content.empty() || !left.content.empty()){
-            if(left.content.empty()){
-                answer.content.push_back(obj.content.front());
-                obj.content.pop_front();
-            }else if(obj.content.empty()){
-                answer.content.push_back(left.content.front());
-                left.content.pop_front();
-            }else if(left.content.front().exponent == obj.content.front().exponent){
-                answer.content.push_back(Node(left.content.front().factor + obj.content.front().factor,left.content.front().exponent));
-                left.content.pop_front();
-                obj.content.pop_front();
-            }else if(left.content.front().exponent > obj.content.front().exponent){
-                answer.content.push_back(left.content.front());
-                left.content.pop_front();
-            }else{
-                answer.content.push_back(obj.content.front());
-                obj.content.pop_front();
-            }
-        }
-        
-        return answer;
-    }
+    Polynomial operator+(Polynomial obj);
     
-    Polynomial operator-(Polynomial obj){
-        Polynomial answer;
-        Polynomial left = *this;
-        
-        while(!obj.content.empty() || !left.content.empty()){
-            if(left.content.empty()){
-                answer.content.push_back(Node(-obj.content.front().factor,obj.content.front().exponent));
-                obj.content.pop_front();
-            }else if(obj.content.empty()){
-                answer.content.push_back(left.content.front());
-                left.content.pop_front();
-            }else if(left.content.front().exponent == obj.content.front().exponent){
-                answer.content.push_back(Node(left.content.front().factor - obj.content.front().factor,left.content.front().exponent));
-                left.content.pop_front();
-                obj.content.pop_front();
-            }else if(left.content.front().exponent > obj.content.front().exponent){
-                answer.content.push_back(left.content.front());
-                left.content.pop_front();
-            }else{
-                answer.content.push_back(Node(-obj.content.front().factor,obj.content.front().exponent));
-                obj.content.pop_front();
-            }
-        }
-        answer.removeZero();
-        return answer;
-    }
+    Polynomial operator-(Polynomial obj);
     
-    Polynomial operator*(Polynomial &obj){
-        Polynomial answer;
-        std::list<Polynomial::Node>::iterator itr1,itr2;
-        itr1 = content.begin();
-        itr2 = obj.content.begin();
-        
-        for(int i = 0;i < content.size();i++){
-            for(int j = 0;j < obj.content.size();j++){
-                answer = answer + Polynomial(itr1->factor * itr2->factor, itr1->exponent + itr2->exponent);
-                itr2++;
-            }
-            itr1++;
-            itr2 = obj.content.begin();
-        }
-        answer.removeZero();
-        return answer;
-    }
+    Polynomial operator*(Polynomial &obj);
     
-    Polynomial operator/(Polynomial obj){
-        Polynomial answer;
-        Polynomial *tmp;
-        Polynomial dividend = *this;
-        std::list<Polynomial::Node>::iterator itr1;
-        std::list<Polynomial::Node>::iterator itr2;
-        itr2 = obj.content.begin();
-        
-        while(dividend > obj){
-            itr1 = dividend.content.begin();
-            tmp = new Polynomial(itr1->factor / itr2->factor , itr1->exponent - itr2->exponent);
-            answer = answer + *tmp;
-            dividend = dividend - *tmp * obj;
-        }
-        
-        return answer;
-    }
+    Polynomial operator/(Polynomial obj);
     
-    void clear(){
-        while(!content.empty()){
-            content.pop_back();
-        }
-    }
+    void clear();
     
-    bool empty()const{
-        return content.empty();
-    }
+    bool empty()const;
     
-    bool getHead(int &factor,int &exponent)const{
-        if(empty()){
-            return false;
-        }else{
-            factor = content.front().factor;
-            exponent = content.front().factor;
-            return true;
-        }
-    }
+    bool getHead(int &factor,int &exponent)const;
     
     //重载逻辑运算符
-    bool operator<(const Polynomial &obj)const{
-        if(content.front().exponent < obj.content.front().exponent)
-            return true;
-        else if(content.front().exponent == obj.content.front().exponent && content.front().factor < obj.content.front().factor)
-            return true;
-        else
-            return false;
-    }
+    bool operator<(const Polynomial &obj)const;
     
-    bool operator>(const Polynomial &obj)const{
-        if(content.front().exponent > obj.content.front().exponent)
-            return true;
-        else if(content.front().exponent == obj.content.front().exponent && content.front().factor > obj.content.front().factor)
-            return true;
-        else
-            return false;
-    }
+    bool operator>(const Polynomial &obj)const;
     
-    bool operator==(const Polynomial &obj)const{
-        return !(*this>obj)&&!(*this<obj);
-    }
+    bool operator==(const Polynomial &obj)const;
     
-    bool operator!=(const Polynomial &obj)const{
-        return !(*this == obj);
-    }
+    bool operator!=(const Polynomial &obj)const;
     
+    //求解同余式
+    void solve(const int &mod,const int rValue);
 
 };
+
+Polynomial Polynomial::operator+(Polynomial obj){
+    Polynomial answer;
+    Polynomial left = *this;
+    while(!obj.content.empty() || !left.content.empty()){
+        if(left.content.empty()){
+            answer.content.push_back(obj.content.front());
+            obj.content.pop_front();
+        }else if(obj.content.empty()){
+            answer.content.push_back(left.content.front());
+            left.content.pop_front();
+        }else if(left.content.front().exponent == obj.content.front().exponent){
+            answer.content.push_back(Node(left.content.front().factor + obj.content.front().factor,left.content.front().exponent));
+            left.content.pop_front();
+            obj.content.pop_front();
+        }else if(left.content.front().exponent > obj.content.front().exponent){
+            answer.content.push_back(left.content.front());
+            left.content.pop_front();
+        }else{
+            answer.content.push_back(obj.content.front());
+            obj.content.pop_front();
+        }
+    }
+    
+    return answer;
+}
+
+Polynomial Polynomial::operator-(Polynomial obj){
+    Polynomial answer;
+    Polynomial left = *this;
+    
+    while(!obj.content.empty() || !left.content.empty()){
+        if(left.content.empty()){
+            answer.content.push_back(Node(-obj.content.front().factor,obj.content.front().exponent));
+            obj.content.pop_front();
+        }else if(obj.content.empty()){
+            answer.content.push_back(left.content.front());
+            left.content.pop_front();
+        }else if(left.content.front().exponent == obj.content.front().exponent){
+            answer.content.push_back(Node(left.content.front().factor - obj.content.front().factor,left.content.front().exponent));
+            left.content.pop_front();
+            obj.content.pop_front();
+        }else if(left.content.front().exponent > obj.content.front().exponent){
+            answer.content.push_back(left.content.front());
+            left.content.pop_front();
+        }else{
+            answer.content.push_back(Node(-obj.content.front().factor,obj.content.front().exponent));
+            obj.content.pop_front();
+        }
+    }
+    answer.removeZero();
+    return answer;
+}
+
+Polynomial Polynomial::operator*(Polynomial &obj){
+    Polynomial answer;
+    std::list<Polynomial::Node>::iterator itr1,itr2;
+    itr1 = content.begin();
+    itr2 = obj.content.begin();
+    
+    for(int i = 0;i < content.size();i++){
+        for(int j = 0;j < obj.content.size();j++){
+            answer = answer + Polynomial(itr1->factor * itr2->factor, itr1->exponent + itr2->exponent);
+            itr2++;
+        }
+        itr1++;
+        itr2 = obj.content.begin();
+    }
+    answer.removeZero();
+    return answer;
+}
+
+Polynomial Polynomial::operator/(Polynomial obj){
+    Polynomial answer;
+    Polynomial *tmp;
+    Polynomial dividend = *this;
+    std::list<Polynomial::Node>::iterator itr1;
+    std::list<Polynomial::Node>::iterator itr2;
+    itr2 = obj.content.begin();
+    
+    while(dividend > obj){
+        itr1 = dividend.content.begin();
+        tmp = new Polynomial(itr1->factor / itr2->factor , itr1->exponent - itr2->exponent);
+        answer = answer + *tmp;
+        dividend = dividend - *tmp * obj;
+    }
+    
+    return answer;
+}
+bool Polynomial::operator<(const Polynomial &obj)const{
+    if(content.front().exponent < obj.content.front().exponent)
+        return true;
+    else if(content.front().exponent == obj.content.front().exponent && content.front().factor < obj.content.front().factor)
+        return true;
+    else
+        return false;
+}
+
+bool Polynomial::operator>(const Polynomial &obj)const{
+    if(content.front().exponent > obj.content.front().exponent)
+        return true;
+    else if(content.front().exponent == obj.content.front().exponent && content.front().factor > obj.content.front().factor)
+        return true;
+    else
+        return false;
+}
+
+bool Polynomial::operator==(const Polynomial &obj)const{
+    return !(*this>obj)&&!(*this<obj);
+}
+
+bool Polynomial::operator!=(const Polynomial &obj)const{
+    return !(*this == obj);
+}
+
+void Polynomial::clear(){
+    while(!content.empty()){
+        content.pop_back();
+    }
+}
+
+bool Polynomial::empty()const{
+    return content.empty();
+}
+
+bool Polynomial::getHead(int &factor,int &exponent)const{
+    if(empty()){
+        return false;
+    }else{
+        factor = content.front().factor;
+        exponent = content.front().factor;
+        return true;
+    }
+}
+
+void Polynomial::solve(const int &mod, const int rValue = 0) {
+    bool flag = false;
+    for(int i = 0;i < mod;i++){
+        if(calculate(mod,i) == rValue){
+            flag =  true;
+            std::cout << "one of the answer is " << i << "\n";
+        }
+    }
+    if(!flag){
+        std::cout << "Sorry, no solution." << std::endl;
+    }
+}
 
 //使用简化方法计算多项式的欧几里得除法
 //symplufy为true时 显示系数取同余后的等价余式
@@ -589,7 +634,7 @@ void EuclidDivide(Polynomial dividend,int &mod,Polynomial &remainder,bool sympli
 }
 
 //使用多项式类的算术运算计算多项式的欧几里得除法
-//symplufy为true时 显示系数取同余后的等价余式
+//symplufy为true时 得到最简化同余式
 void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &remainder,bool symplify = false){
     quotient.clear();
     remainder.clear();
@@ -608,4 +653,26 @@ void EuclidDivide(Polynomial dividend,int &mod,Polynomial &quotient,Polynomial &
     }
 }
 
+
+//雅可比符号的计算
+int JacobiSignal(int up, int down){
+    //求模
+    up = up % down;
+    //递归终点
+    if(up == 1 || up == 0)
+        return 1;
+    //保证上方为正的奇整数
+    if(up % 2 == 0){
+        //2/p的计算
+        return JacobiSignal(up/2, down) * pow(-1,(down * down -1 )/8);
+    }else if(up < 0){
+        //-1/p的计算
+        return JacobiSignal(-up, down) * pow(-1,(down *down -1)/2);
+    }else{
+        //二次互反律
+        return JacobiSignal(down, up) * pow(-1, (up - 1)*(down - 1)/4);
+    }
+    
+    return 0;
+}
 #endif /*MathFoundation_hpp*/
