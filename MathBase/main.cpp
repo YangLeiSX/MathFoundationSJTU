@@ -12,5 +12,6 @@
 #include "MathFoundation.hpp"
 
 int main(int argc, const char * argv[]) {
+    findPrimRoot(113);
     return 0;
 }

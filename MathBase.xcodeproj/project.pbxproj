@@ -28,6 +28,7 @@
 		9504436A228ABDA200917658 /* Chapter2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chapter2.hpp; sourceTree = "<group>"; };
 		9504436D228ABDB000917658 /* Chapter3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chapter3.hpp; sourceTree = "<group>"; };
 		95044370228ABDBC00917658 /* Chapter4.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chapter4.hpp; sourceTree = "<group>"; };
+		95044372228AD4EF00917658 /* Rabin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rabin.h; sourceTree = "<group>"; };
 		950FD6792227D5B100EA43E5 /* MathBase */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MathBase; sourceTree = BUILT_PRODUCTS_DIR; };
 		950FD67C2227D5B100EA43E5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9598A43B227DA34C00100F6A /* MathFoundation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MathFoundation.hpp; sourceTree = "<group>"; };
@@ -69,6 +70,7 @@
 				950FD67C2227D5B100EA43E5 /* main.cpp */,
 				9598A43B227DA34C00100F6A /* MathFoundation.hpp */,
 				95CE4C962261DF0D000CE158 /* RSA.h */,
+				95044372228AD4EF00917658 /* Rabin.h */,
 				95044367228ABD9500917658 /* Chapter1.hpp */,
 				9504436A228ABDA200917658 /* Chapter2.hpp */,
 				9504436D228ABDB000917658 /* Chapter3.hpp */,
