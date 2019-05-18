@@ -29,7 +29,7 @@
 		9504436D228ABDB000917658 /* Chapter3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chapter3.hpp; sourceTree = "<group>"; };
 		95044370228ABDBC00917658 /* Chapter4.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chapter4.hpp; sourceTree = "<group>"; };
 		95044372228AD4EF00917658 /* Rabin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rabin.h; sourceTree = "<group>"; };
-		950FD6792227D5B100EA43E5 /* MathBase */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MathBase; sourceTree = BUILT_PRODUCTS_DIR; };
+		950FD6792227D5B100EA43E5 /* MathFoundation */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MathFoundation; sourceTree = BUILT_PRODUCTS_DIR; };
 		950FD67C2227D5B100EA43E5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9598A43B227DA34C00100F6A /* MathFoundation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MathFoundation.hpp; sourceTree = "<group>"; };
 		95CE4C962261DF0D000CE158 /* RSA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSA.h; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		950FD6702227D5B000EA43E5 = {
 			isa = PBXGroup;
 			children = (
-				950FD67B2227D5B100EA43E5 /* MathBase */,
+				950FD67B2227D5B100EA43E5 /* MathFoundation */,
 				950FD67A2227D5B100EA43E5 /* Products */,
 				95CE4C972261E45F000CE158 /* Frameworks */,
 			);
@@ -59,12 +59,12 @@
 		950FD67A2227D5B100EA43E5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				950FD6792227D5B100EA43E5 /* MathBase */,
+				950FD6792227D5B100EA43E5 /* MathFoundation */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		950FD67B2227D5B100EA43E5 /* MathBase */ = {
+		950FD67B2227D5B100EA43E5 /* MathFoundation */ = {
 			isa = PBXGroup;
 			children = (
 				950FD67C2227D5B100EA43E5 /* main.cpp */,
@@ -77,7 +77,7 @@
 				95044370228ABDBC00917658 /* Chapter4.hpp */,
 				95044364228A9C2400917658 /* Chapter5.hpp */,
 			);
-			path = MathBase;
+			path = MathFoundation;
 			sourceTree = "<group>";
 		};
 		95CE4C972261E45F000CE158 /* Frameworks */ = {
@@ -91,9 +91,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		950FD6782227D5B000EA43E5 /* MathBase */ = {
+		950FD6782227D5B000EA43E5 /* MathFoundation */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 950FD6802227D5B100EA43E5 /* Build configuration list for PBXNativeTarget "MathBase" */;
+			buildConfigurationList = 950FD6802227D5B100EA43E5 /* Build configuration list for PBXNativeTarget "MathFoundation" */;
 			buildPhases = (
 				950FD6752227D5B000EA43E5 /* Sources */,
 				950FD6762227D5B000EA43E5 /* Frameworks */,
@@ -103,9 +103,9 @@
 			);
 			dependencies = (
 			);
-			name = MathBase;
+			name = MathFoundation;
 			productName = MathBase;
-			productReference = 950FD6792227D5B100EA43E5 /* MathBase */;
+			productReference = 950FD6792227D5B100EA43E5 /* MathFoundation */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -122,7 +122,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 950FD6742227D5B000EA43E5 /* Build configuration list for PBXProject "MathBase" */;
+			buildConfigurationList = 950FD6742227D5B000EA43E5 /* Build configuration list for PBXProject "MathFoundation" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -134,7 +134,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				950FD6782227D5B000EA43E5 /* MathBase */,
+				950FD6782227D5B000EA43E5 /* MathFoundation */,
 			);
 		};
 /* End PBXProject section */
@@ -283,7 +283,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		950FD6742227D5B000EA43E5 /* Build configuration list for PBXProject "MathBase" */ = {
+		950FD6742227D5B000EA43E5 /* Build configuration list for PBXProject "MathFoundation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				950FD67E2227D5B100EA43E5 /* Debug */,
@@ -292,7 +292,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		950FD6802227D5B100EA43E5 /* Build configuration list for PBXNativeTarget "MathBase" */ = {
+		950FD6802227D5B100EA43E5 /* Build configuration list for PBXNativeTarget "MathFoundation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				950FD6812227D5B100EA43E5 /* Debug */,
