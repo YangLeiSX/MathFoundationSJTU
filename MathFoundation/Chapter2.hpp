@@ -59,10 +59,10 @@ int EularFunction(int number){
 
 //使用模重复平方算法计算
 //base^exp (mod mod)
-int opeMod(int base,int exp,int mod){
+int opeMod(long base,long exp,long mod){
     //设置初值
-    unsigned long answer = 1;
-    unsigned long val = base % mod;
+    long long answer = 1;
+    long long val = base % mod;
     
     while(exp != 0){
         if(exp % 2 == 1){

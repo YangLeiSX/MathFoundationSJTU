@@ -2,6 +2,7 @@
 //  Chapter5.hpp
 //  MathBase
 //
+//  第五章 原根与指标
 //  Created by 杨磊 on 2019/5/14.
 //  Copyright © 2019 杨磊. All rights reserved.
 //

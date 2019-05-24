@@ -11,7 +11,7 @@
 #define Chapter4_hpp
 
 //雅可比符号的计算
-int JacobiSignal(int up, int down){
+int JacobiSignal(long up, long down){
     //求模
     up = up % down;
     //递归终点
