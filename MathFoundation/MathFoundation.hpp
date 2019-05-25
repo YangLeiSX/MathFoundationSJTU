@@ -51,7 +51,7 @@
  *  #include "Chapter6.hpp"
  *  第六章 素性检验
  *  包括Fermat素性检验，Solovay-Stassen素性检验
- *  Miller-Rabin素性检验，伪素数生成，平方因子判定
+ *  Miller-Rabin素性检验，伪素数生成
  *  Eular伪素数生成，强伪素数生成
  */
 #include "Chapter6.hpp"
