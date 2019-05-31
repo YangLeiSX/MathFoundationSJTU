@@ -1,4 +1,4 @@
-# MathFoundation
+# MathFoundationSJTU
 上海交通大学
 
 信息安全的数学基础课程代码
