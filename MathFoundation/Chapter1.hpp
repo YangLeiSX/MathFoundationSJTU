@@ -88,7 +88,7 @@ bool isCoprime(const int numa,const int numb){
 //printResult为真时，输出 s*a+t*b = (a,b)
 void BezoutEquation(const int a,const int b,int & s,int & t,bool printResult = true){
     std::vector<int> va,vb,vq,vr;//存放计算得到的序列
-    std::vector<int>::iterator itr;
+    //std::vector<int>::iterator itr;
     std::vector<int> ans;//存放反向迭代得到的参数
     
     //特殊情况的处理
