@@ -33,3 +33,7 @@
 
 # Project Config Files
 *.xcodeproj
+
+# GUI Cache
+*/.DS_Store
+./DS_Store
